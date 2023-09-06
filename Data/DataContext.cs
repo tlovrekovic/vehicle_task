@@ -13,8 +13,8 @@ namespace vehicle_task.Data
         {
             
         }
-        public DbSet<VehicleMake> vehicleMakes => Set<VehicleMake>();
-        public DbSet<VehicleModel> vehicleModels => Set<VehicleModel>();
+        public DbSet<VehicleMake> VehicleMakes => Set<VehicleMake>();
+        public DbSet<VehicleModel> VehicleModels => Set<VehicleModel>();
 
     }
 }
