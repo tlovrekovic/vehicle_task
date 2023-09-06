@@ -8,8 +8,6 @@ namespace vehicle_task.DTOs
 {
     public class AddVehicleModelDto
     {
-        public int Id { get; set; }
-        public int MakeId { get; set; }
         public string Name { get; set; } = "Golf 7";
         public string Abrv { get; set; } = "G7";
         public  VehicleMake Make { get; set; } = new VehicleMake();

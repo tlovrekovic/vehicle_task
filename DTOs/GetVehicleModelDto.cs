@@ -12,6 +12,6 @@ namespace vehicle_task.DTOs
         public int MakeId { get; set; }
         public string Name { get; set; } = "Golf 7";
         public string Abrv { get; set; } = "G7";
-        public  VehicleMake Make { get; set; } = new VehicleMake();
+        public  VehicleMake? Make { get; set; } 
     }
 }

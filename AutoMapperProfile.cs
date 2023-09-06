@@ -12,6 +12,9 @@ namespace vehicle_task
     {
         CreateMap<VehicleMake,GetVehicleMakeDto>();
         CreateMap<AddVehicleMakeDto, VehicleMake>();
+
+        CreateMap<VehicleModel,GetVehicleModelDto>();
+        CreateMap<AddVehicleModelDto, VehicleModel>();
     }
     }
 }

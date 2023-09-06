@@ -93,6 +93,7 @@ namespace vehicle_task.Services.VehicleService
                     throw new Exception($"Vehicle make with Id '{updatedVehicleMake.Id}' not found.");
                 vehicleMake.Name = updatedVehicleMake.Name;
                 vehicleMake.Abrv = updatedVehicleMake.Abrv;
+            
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetVehicleMakeDto>(vehicleMake);
             }
