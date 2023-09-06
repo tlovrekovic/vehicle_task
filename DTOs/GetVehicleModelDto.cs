@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using vehicle_task.Models;
+
+namespace vehicle_task.DTOs
+{
+    public class GetVehicleModelDto
+    {
+        public int Id { get; set; }
+        public int MakeId { get; set; }
+        public string Name { get; set; } = "Golf 7";
+        public string Abrv { get; set; } = "G7";
+        public  VehicleMake Make { get; set; } = new VehicleMake();
+    }
+}
