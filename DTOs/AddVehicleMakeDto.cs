@@ -7,7 +7,6 @@ namespace vehicle_task.DTOs
 {
     public class AddVehicleMakeDto
     {
-        public int Id { get; set; }
         public string Name { get; set; } = "Volkswagen";
         public string Abrv { get; set; }= "VW";
     }

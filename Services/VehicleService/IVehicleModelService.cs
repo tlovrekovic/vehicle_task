@@ -8,7 +8,7 @@ namespace vehicle_task.Services
 {
     public interface IVehicleModelService
     {
-         Task<ServiceResponse<List<GetVehicleModelDto>>>GetAllVehicleModels();
+         Task<ServiceResponse<List<GetVehicleModelDto>>>GetAllVehicleModels(string searchTerm, string sortBy, bool ascending, int pageNumber, int pageSize);
         Task<ServiceResponse<GetVehicleModelDto>> GetVehicleModelById(int id);
         Task<ServiceResponse<List<GetVehicleModelDto>>> AddVehicleModel (AddVehicleModelDto newVehicleModel);
 

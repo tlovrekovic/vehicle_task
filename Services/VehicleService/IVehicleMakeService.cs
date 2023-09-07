@@ -10,7 +10,7 @@ namespace vehicle_task.Services.VehicleService
 {
     public interface IVehicleMakeService
     {
-         Task<ServiceResponse<List<GetVehicleMakeDto>>>GetAllVehicleMakes();
+         Task<ServiceResponse<List<GetVehicleMakeDto>>>GetAllVehicleMakes(string searchTerm, string sortBy, bool ascending, int pageNumber, int pageSize);
         Task<ServiceResponse<GetVehicleMakeDto>> GetVehicleMakeById(int id);
         Task<ServiceResponse<List<GetVehicleMakeDto>>> AddVehicleMake (AddVehicleMakeDto newVehicleMake);
 

@@ -65,11 +65,49 @@ namespace vehicle_task.Services.VehicleService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetVehicleMakeDto>>> GetAllVehicleMakes()
+        public async Task<ServiceResponse<List<GetVehicleMakeDto>>> GetAllVehicleMakes(string searchTerm= null , string sortBy = null, bool ascending = true, int pageNumber = 1, int pageSize = 10)
         {
             var serviceResponse = new ServiceResponse<List<GetVehicleMakeDto>>();
-            var dbCharacters = await _context.VehicleMakes.ToListAsync();
-            serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetVehicleMakeDto>(c)).ToList();
+            try
+            {
+                var query = _context.VehicleMakes.AsQueryable();
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    searchTerm = searchTerm.Trim().ToLower();
+                    query = query.Where(vm => vm.Name.ToLower().Contains(searchTerm) || vm.Abrv.ToLower().Contains(searchTerm));
+                }
+
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    switch (sortBy.ToLower())
+                    {
+                        case "name":
+                            query = ascending ? query.OrderBy(vm => vm.Name) : query.OrderByDescending(vm => vm.Name);
+                            break;
+                        case "id":
+                            query = ascending ? query.OrderBy(vm => vm.Id) : query.OrderByDescending(vm => vm.Id);
+                            break;
+                        case "abrv":
+                            query = ascending ? query.OrderBy(vm => vm.Abrv) : query.OrderByDescending(vm => vm.Abrv);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                //straničenje
+                int skip = (pageNumber - 1) * pageSize;
+                int take = pageSize;
+                query = query.Skip(skip).Take(take);
+                var dbCharacters = await query.ToListAsync();
+                serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetVehicleMakeDto>(c)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Failed to retrieve vehicle makes: " + ex.Message;
+            }
+
+
             return serviceResponse;
         }
 
@@ -93,7 +131,7 @@ namespace vehicle_task.Services.VehicleService
                     throw new Exception($"Vehicle make with Id '{updatedVehicleMake.Id}' not found.");
                 vehicleMake.Name = updatedVehicleMake.Name;
                 vehicleMake.Abrv = updatedVehicleMake.Abrv;
-            
+
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetVehicleMakeDto>(vehicleMake);
             }

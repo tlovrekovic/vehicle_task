@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using vehicle_task.Services;
 using vehicle_task.Services.VehicleService;
+using vehicle_task.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,5 +31,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+//seeding DB
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<vehicle_task.Data.DataContext>();
+    var dataSeeder = new DataSeeder(context);
+    dataSeeder.SeedRandomVehicleModelsAsync(50).Wait(); 
+}
 
 app.Run();

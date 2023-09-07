@@ -11,19 +11,23 @@ namespace vehicle_task.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    public class VehicleModelController  : ControllerBase
+    public class VehicleModelController : ControllerBase
     {
 
         private readonly IVehicleModelService _vehicleMakeService;
 
-        public VehicleModelController (IVehicleModelService vehicleMakeService)
+        public VehicleModelController(IVehicleModelService vehicleMakeService)
         {
             _vehicleMakeService = vehicleMakeService;
         }
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<GetVehicleModelDto>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetVehicleModelDto>>>> Get([FromQuery] string searchTerm = "",
+    [FromQuery] string sortBy = "Id",
+    [FromQuery] bool ascending = true,
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10)
         {
-            return Ok(await _vehicleMakeService.GetAllVehicleModels());
+            return Ok(await _vehicleMakeService.GetAllVehicleModels(searchTerm, sortBy, ascending, pageNumber, pageSize));
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetVehicleModelDto>>> GetSingle(int id)
