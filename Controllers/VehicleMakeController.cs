@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using vehicle_task.DTOs;
+using vehicle_task.Parameters;
 using vehicle_task.Services.VehicleService;
 
 namespace vehicle_task.Controllers
@@ -20,13 +21,12 @@ namespace vehicle_task.Controllers
             _vehicleMakeService = vehicleMakeService;
         }
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<GetVehicleMakeDto>>>> Get([FromQuery] string searchTerm = "",
-    [FromQuery] string sortBy = "Id",
-    [FromQuery] bool ascending = true,
-    [FromQuery] int pageNumber = 1,
-    [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<ServiceResponse<List<GetVehicleMakeDto>>>> Get(
+    [FromQuery] PagingParameters pagingParameters,
+    [FromQuery] SortingParameters sortingParameters,
+    [FromQuery] FilteringParameters filteringParameters)
         {
-            return Ok(await _vehicleMakeService.GetAllVehicleMakes(searchTerm, sortBy, ascending, pageNumber, pageSize));
+            return Ok(await _vehicleMakeService.GetAllVehicleMakes(pagingParameters, sortingParameters, filteringParameters));
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetVehicleMakeDto>>> GetSingle(int id)

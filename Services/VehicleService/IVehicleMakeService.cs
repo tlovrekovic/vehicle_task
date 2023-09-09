@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using vehicle_task.DTOs;
+using vehicle_task.Parameters;
 
 namespace vehicle_task.Services.VehicleService
 {
     public interface IVehicleMakeService
     {
-         Task<ServiceResponse<List<GetVehicleMakeDto>>>GetAllVehicleMakes(string searchTerm, string sortBy, bool ascending, int pageNumber, int pageSize);
+         Task<ServiceResponse<List<GetVehicleMakeDto>>>GetAllVehicleMakes(PagingParameters pagingParameters, SortingParameters sortingParameters, FilteringParameters filteringParameters);
         Task<ServiceResponse<GetVehicleMakeDto>> GetVehicleMakeById(int id);
         Task<ServiceResponse<List<GetVehicleMakeDto>>> AddVehicleMake (AddVehicleMakeDto newVehicleMake);
 

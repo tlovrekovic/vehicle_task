@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using vehicle_task.Data;
 using vehicle_task.DTOs;
+using vehicle_task.Parameters;
 
 namespace vehicle_task.Services.VehicleService
 {
@@ -65,38 +66,41 @@ namespace vehicle_task.Services.VehicleService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetVehicleMakeDto>>> GetAllVehicleMakes(string searchTerm= null , string sortBy = null, bool ascending = true, int pageNumber = 1, int pageSize = 10)
+        public async Task<ServiceResponse<List<GetVehicleMakeDto>>> GetAllVehicleMakes(PagingParameters pagingParameters, SortingParameters sortingParameters, FilteringParameters filteringParameters)
         {
             var serviceResponse = new ServiceResponse<List<GetVehicleMakeDto>>();
             try
             {
                 var query = _context.VehicleMakes.AsQueryable();
-                if (!string.IsNullOrEmpty(searchTerm))
+                if (!string.IsNullOrEmpty(filteringParameters.Keyword))
                 {
-                    searchTerm = searchTerm.Trim().ToLower();
+                    var searchTerm = filteringParameters.Keyword.Trim().ToLower();
                     query = query.Where(vm => vm.Name.ToLower().Contains(searchTerm) || vm.Abrv.ToLower().Contains(searchTerm));
                 }
+                else{
+                    
+                }
 
-                if (!string.IsNullOrEmpty(sortBy))
+                if (!string.IsNullOrEmpty(sortingParameters.SortBy))
                 {
-                    switch (sortBy.ToLower())
+                    switch (sortingParameters.SortBy.ToLower())
                     {
                         case "name":
-                            query = ascending ? query.OrderBy(vm => vm.Name) : query.OrderByDescending(vm => vm.Name);
+                            query = sortingParameters.SortDirection=="asc" ? query.OrderBy(vm => vm.Name) : query.OrderByDescending(vm => vm.Name);
                             break;
                         case "id":
-                            query = ascending ? query.OrderBy(vm => vm.Id) : query.OrderByDescending(vm => vm.Id);
+                            query = sortingParameters.SortDirection=="asc" ? query.OrderBy(vm => vm.Id) : query.OrderByDescending(vm => vm.Id);
                             break;
                         case "abrv":
-                            query = ascending ? query.OrderBy(vm => vm.Abrv) : query.OrderByDescending(vm => vm.Abrv);
+                            query = sortingParameters.SortDirection=="asc" ? query.OrderBy(vm => vm.Abrv) : query.OrderByDescending(vm => vm.Abrv);
                             break;
                         default:
                             break;
                     }
                 }
                 //straničenje
-                int skip = (pageNumber - 1) * pageSize;
-                int take = pageSize;
+                int skip = (pagingParameters.PageNumber - 1) * pagingParameters.PageSize;
+                int take = pagingParameters.PageSize;
                 query = query.Skip(skip).Take(take);
                 var dbCharacters = await query.ToListAsync();
                 serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetVehicleMakeDto>(c)).ToList();
